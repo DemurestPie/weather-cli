@@ -1,5 +1,9 @@
 import requests
+from dotenv import load_dotenv
 import os
+
+# Load environment variables
+load_dotenv()
 
 ## PROGRAM SETTINGS
 # Units for temperature (standard for kevin, imperial for fahrenheit, metric for celsius)
@@ -7,7 +11,7 @@ units = "imperial"
 # Country code
 country = "US"
 # API key
-API_KEY = "your_openweathermap_api_key"
+API_KEY = os.getenv("API_KEY")
 
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
