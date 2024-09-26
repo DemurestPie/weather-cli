@@ -32,7 +32,7 @@ This is a simple command-line application that retrieves weather information usi
 
 3. Obtain an API key from [OpenWeatherMap](https://home.openweathermap.org/users/sign_up).
 
-4. Replace the `API_KEY` in the script with your OpenWeatherMap API key.
+4. Set the `API_KEY` in the .env file to your OpenWeatherMap API key.
 
    ```python
    API_KEY = "your_openweathermap_api_key"

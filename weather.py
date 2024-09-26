@@ -1,6 +1,7 @@
 import requests
 from dotenv import load_dotenv
 import os
+import datetime
 
 # Load environment variables
 load_dotenv()
@@ -19,44 +20,28 @@ def clear_console():
 # Function to get weather by zipcode
 def get_weather_by_zipcode(zipcode):
 
-    url = f"https://api.openweathermap.org/data/2.5/weather?zip={zipcode},{country}&units=imperial&appid={API_KEY}"
+    url = f"https://api.openweathermap.org/data/2.5/weather?zip={zipcode},{country}&units={units}&appid={API_KEY}"
 
     # Send the GET request
     response = requests.get(url)
 
     # Check if the request was successful
     if response.status_code == 200:
-        # Parse the XML response and display the result
-        print(f"Weather for {response.json()['name']}:")
-        print(f"{"-" * 20}")
-        print(f"Temperature: {round(response.json()['main']['temp'])}°F")
-        print(f"Feels like: {round(response.json()['main']['feels_like'])}°F")
-        print(f"Description: {response.json()['weather'][0]['description']}")
-        print(f"High: {round(response.json()['main']['temp_max'])}°F")
-        print(f"Low: {round(response.json()['main']['temp_min'])}°F")
-        print(f"Humidity: {response.json()['main']['humidity']}%")
+        print_weather(response.json())
     else:
         print(f"Failed to retrieve details. HTTP Status code: {response.status_code}")
 
 # Function to get weather by coordinates
 def get_weather_by_coordinates(lat, lon):
 
-    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=imperial&appid={API_KEY}"
+    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units={units}&appid={API_KEY}"
 
     # Send the GET request
     response = requests.get(url)
 
     # Check if the request was successful
     if response.status_code == 200:
-        # Parse the XML response and display the result
-        print(f"Weather for {response.json()['name']}:")
-        print(f"{"-" * 20}")
-        print(f"Temperature: {round(response.json()['main']['temp'])}°F")
-        print(f"Feels like: {round(response.json()['main']['feels_like'])}°F")
-        print(f"Description: {response.json()['weather'][0]['description']}")
-        print(f"High: {round(response.json()['main']['temp_max'])}°F")
-        print(f"Low: {round(response.json()['main']['temp_min'])}°F")
-        print(f"Humidity: {response.json()['main']['humidity']}%")
+        print_weather(response.json())
     else:
         print(f"Failed to retrieve details. HTTP Status code: {response.status_code}")
 
@@ -64,24 +49,37 @@ def get_weather_by_coordinates(lat, lon):
 # Function to get weather by city and state
 def get_weather_by_city(city, state):
 
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city},{state},{country}&units=imperial&appid={API_KEY}"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city},{state},{country}&units={units}&appid={API_KEY}"
 
     # Send the GET request
     response = requests.get(url)
 
     # Check if the request was successful
     if response.status_code == 200:
-        # Parse the XML response and display the result
-        print(f"Weather for {response.json()['name']}:")
-        print(f"{"-" * 20}")
-        print(f"Temperature: {round(response.json()['main']['temp'])}°F")
-        print(f"Feels like: {round(response.json()['main']['feels_like'])}°F")
-        print(f"Description: {response.json()['weather'][0]['description']}")
-        print(f"High: {round(response.json()['main']['temp_max'])}°F")
-        print(f"Low: {round(response.json()['main']['temp_min'])}°F")
-        print(f"Humidity: {response.json()['main']['humidity']}%")
+        print_weather(response.json())
     else:
         print(f"Failed to retrieve details. HTTP Status code: {response.status_code}")
+
+# Function to print weather details
+def print_weather(response):
+    print(f"Weather for {response['name']}:")
+    print(f"{'-' * 20}")
+    print(f"Temperature: {round(response['main']['temp'])}°F")
+    print(f"Feels like: {round(response['main']['feels_like'])}°F")
+    print(f"Description: {response['weather'][0]['description'].capitalize()}")
+    print(f"High: {round(response['main']['temp_max'])}°F")
+    print(f"Low: {round(response['main']['temp_min'])}°F")
+    print(f"Humidity: {response['main']['humidity']}%")
+    print(f"Pressure: {response['main']['pressure']} hPa")
+    print(f"Visibility: {response['visibility']} meters")
+    print(f"Wind Speed: {response['wind']['speed']} m/s")
+    
+    # Convert sunrise and sunset times from Unix to readable format
+    sunrise = datetime.datetime.fromtimestamp(response['sys']['sunrise']).strftime('%H:%M:%S')
+    sunset = datetime.datetime.fromtimestamp(response['sys']['sunset']).strftime('%H:%M:%S')
+    
+    print(f"Sunrise: {sunrise}")
+    print(f"Sunset: {sunset}")
 
 
 def main():
